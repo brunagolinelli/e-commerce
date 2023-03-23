@@ -1,44 +1,61 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import Filter from "./components/Filters/Filters";
-import { produtos } from "./prodcts";
+import { produtos } from "./produtos";
 
- function App() {
-  // const state = await axios.get('https://api.beuni.com.br/atlas/brands/v2/products?q=&category=&min=0&max=99999&sortBy=featured&page=1&perPage=50')
-
-  const [maxFilter, setMaxFilter] = useState(10000);
+function App() {
+  const [maxFilter, setMaxFilter] = useState(100000);
   const [minFilter, setMinFilter] = useState(0)
   const [search, setSearch] = useState('')
+  const [filteredProducts, setFilteredProducts] = useState(produtos);
 
-  function onChangeSearch (e) {
-    setSearch (e.target.value)
+  useEffect(() => {
+    filter();
+  }, [search, minFilter, maxFilter])
+
+  function filter() {
+    const filtered = produtos.filter((p) => {
+      return ((search ? p.name === search : true) && p.price >= minFilter && p.price <= maxFilter)
+    })
+    setFilteredProducts(filtered);
   }
 
-  function onChangeMinPrice (e) {
-    setMinFilter (e.target.value)
-  } 
-
-  function onChangeMaxPrice (e) {
-    setMaxFilter(e.target.valeu)
+  function onChangeMinPrice(e) {
+    setMinFilter(e.target.value)
   }
-  
-  const filterMin =  produtos.filter(produto => {
-    if(maxFilter){
-      return produto.price <= maxFilter
-    }
-  }
-  )
 
-  console.log(filterMin)
+  function onChangeMaxPrice(e) {
+    setMaxFilter(e.target.value)
+  }
+
+  function onChangeSearch(e) {
+    setSearch(e.target.value);
+  }
+
+  const renderComponent = (name, price, img) => {
+    return (
+      
+      <div style={{display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", flex: 1}} key={name}>        
+        <img src={img[0].url} width={150} height={150} style={{filter: "drop-shadow(1px 1px 8px red)"}}/>
+        <h1>Nome: {name} Preço: {price}</h1>
+      </div>
+    )
+  }
 
   return (
     <div>
       <Filter
-      minPrice={minFilter}
-      maxPrice={maxFilter}
-      busca={search}
-      onChangeMaxPrice={onChangeMaxPrice}
-      onChangeMinPrice={onChangeMinPrice}
-      onChangeSearch={onChangeSearch}/>
+        minPrice={minFilter}
+        maxPrice={maxFilter}
+        busca={search}
+        onChangeMaxPrice={onChangeMaxPrice}
+        onChangeMinPrice={onChangeMinPrice}
+        onChangeSearch={onChangeSearch}
+      />
+      
+      {filteredProducts.length > 0 ? filteredProducts.map((p) => (
+        renderComponent(p.name, p.price, p.image)
+      )) : <h1>Busca não encontrada 😢 </h1>}
+
     </div>
   );
 }
