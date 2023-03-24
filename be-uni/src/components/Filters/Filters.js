@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { GroupFilters, InputGroup } from './styled';
+import { GroupFilters, InputGroup, FilterImage } from './styled';
 import TextField from '@mui/material/TextField';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -21,7 +21,10 @@ export default function Filter(props) {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography>Filtros</Typography>
+                    <FilterImage>
+                        <img src="https://beuni.com.br/wp-content/uploads/sites/17/2022/07/beuni-menor.png?x24827" alt='logo'></img>
+                        <Typography align="center">Filtros</Typography>
+                    </FilterImage>
                 </AccordionSummary>
                 <AccordionDetails>
                     <InputGroup>
@@ -29,13 +32,6 @@ export default function Filter(props) {
                             <CustomLabel name="Preço máximo" />
                             <TextField type="number"
                                 placeholder='R$ Máx'
-                                sx={{
-                                    width: 500,
-                                    maxWidth: '100%',
-                                }}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
                                 variant="outlined"
                                 value={props.maxPrice}
                                 onChange={props.onChangeMaxPrice} />
@@ -44,13 +40,6 @@ export default function Filter(props) {
                             <CustomLabel name="Preço mínimo" />
                             <TextField id="outlined-basic" type="number"
                                 placeholder='R$ Min'
-                                sx={{
-                                    width: 500,
-                                    maxWidth: '100%',
-                                }}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
                                 variant="outlined"
                                 value={props.minPrice}
                                 onChange={props.onChangeMinPrice} />
